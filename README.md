@@ -12,7 +12,7 @@ Simple ToDo app
 Here's a walkthrough of implemented user stories:
 
 
-<img src='https://raw.githubusercontent.com/burakfirik/TipCalculator/master/iPhone5s.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/burakfirik/ToDoList/blob/master/ToDo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
     Copyright 2017 Burak Firik
