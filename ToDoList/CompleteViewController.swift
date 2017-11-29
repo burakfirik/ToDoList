@@ -5,10 +5,20 @@ class CompleteViewController: UIViewController {
 
   
   var previousVC = ToDoTableViewController()
-  var selectedTask = Task()
+  var selectedTask:TaskCore?
   
   @IBOutlet weak var taskDesc: UILabel!
+  
   @IBAction func completeTapped(_ sender: Any) {
+    if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+      if let theTask = selectedTask {
+        context.delete(theTask)
+        navigationController?.popViewController(animated: true)
+      }
+    }
+    
+    
+    /*
     var index = 0;
     for task in previousVC.tasks {
       
@@ -20,11 +30,12 @@ class CompleteViewController: UIViewController {
       }
       index += 1
     }
+ */
   }
     override func viewDidLoad() {
         super.viewDidLoad()
-        taskDesc.text = selectedTask.name
-        
+        taskDesc.text = selectedTask?.name
+       // taskDesc.text = "Selam"
         // Do any additional setup after loading the view.
     }
 

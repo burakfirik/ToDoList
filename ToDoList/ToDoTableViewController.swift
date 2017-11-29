@@ -9,29 +9,49 @@
 import UIKit
 
 class ToDoTableViewController: UITableViewController {
-  var tasks: [Task] = []
+  var tasks: [TaskCore] = []
   
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tasks = createTasks()
-      
+  override func viewDidLoad() {
+    super.viewDidLoad()
+  }
+  
+  
+  func getToDos() {
+    if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+      if let coreDataTask = try? context.fetch(TaskCore.fetchRequest()) as? [TaskCore] {
+        if let core = coreDataTask {
+          tasks = core
+          tableView.reloadData()
+        }
+      }
     }
+  }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return tasks.count
   }
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  
+  override func viewWillAppear(_ animated: Bool) {
+    getToDos()
+  }
+  
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+    let task = tasks[indexPath.row]
+    
+    if let name = task.name {
+      if (task.important) {
+        cell.textLabel?.text = "❗️" + name
+      } else {
+        cell.textLabel?.text = name
+      }
       
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
-        let task = tasks[indexPath.row]
-        if (task.important) {
-          cell.textLabel?.text = "❗️" + task.name
-        } else {
-          cell.textLabel?.text = task.name
-        }
       
-        return cell
     }
+    
+    return cell
+  }
   
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -45,7 +65,7 @@ class ToDoTableViewController: UITableViewController {
       addVC.previousVC = self
     }
     if let completeVC = segue.destination as? CompleteViewController {
-      if let toDo = sender as? Task {
+      if let toDo = sender as? TaskCore {
         completeVC.selectedTask = toDo
         completeVC.previousVC = self
       }
@@ -54,7 +74,7 @@ class ToDoTableViewController: UITableViewController {
     }
   }
   
- 
+  
   func createTasks() -> [Task] {
     let task1 = Task()
     task1.name = "Buy Eggs"
@@ -65,9 +85,9 @@ class ToDoTableViewController: UITableViewController {
     
     let chese = Task()
     chese.name = "Eat Cheese"
-
+    
     return [task1, task2,chese]
   }
-
+  
   
 }

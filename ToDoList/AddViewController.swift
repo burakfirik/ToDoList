@@ -19,6 +19,7 @@ class AddViewController: UIViewController {
   
   @IBAction func addTapped(_ sender: Any) {
     
+    /*
     if let titleText = titleTextField.text {
       var task = Task()
       task.name = titleTextField.text!
@@ -27,7 +28,19 @@ class AddViewController: UIViewController {
       previousVC.tableView.reloadData()
       navigationController?.popViewController(animated: true)
     }
- 
+ */
+    
+    if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+      let task = TaskCore(entity: TaskCore.entity(), insertInto: context)
+      
+      if let titleText = titleTextField.text {
+        task.name = titleTextField.text!
+        task.important = importantSwitch.isOn
+      }
+      try? context.save()
+      navigationController?.popViewController(animated: true)
+      
+    }
     
     
     
